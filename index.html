@@ -2169,7 +2169,7 @@
 
     <!-- Bakgrunnsmusikk (skjult audio + mute-knapp) -->
     <audio id="intro-audio"
-           src="assets/audio/the_mountain-space-438391.mp3"
+           src="the_mountain-space-438391.mp3"
            preload="auto"
            loop></audio>
 
@@ -2258,7 +2258,7 @@
           </h1>
           <!-- Skrivemaskin-lyd, synkron med typewriter-animasjonen -->
           <audio id="typewriter-audio"
-                 src="assets/audio/typewriter-typing.mp3"
+                 src="typewriter-typing.mp3"
                  preload="auto"></audio>
         </div>
 
@@ -4283,6 +4283,32 @@
         }
       });
 
+      // ── First-click-anywhere: start bakgrunnsmusikk én gang ──
+      // Browsers blokkerer autoplay; men ENHVER bruker-gesture (klikk på siden)
+      // teller som tilstrekkelig interaksjon. Vi lytter én gang og starter
+      // musikken hvis brukeren ikke allerede har skrudd den på via mute-knappen.
+      let firstClickConsumed = false;
+      function firstUserInteraction(e) {
+        if (firstClickConsumed) return;
+        // Hvis brukeren klikket på selve mute-toggle, la den håndtere det
+        if (e && e.target && e.target.closest && e.target.closest('#intro-sound-toggle')) {
+          firstClickConsumed = true;
+          removeFirstClickListeners();
+          return;
+        }
+        firstClickConsumed = true;
+        removeFirstClickListeners();
+        if (!isPlaying) toggleSound();
+      }
+      function removeFirstClickListeners() {
+        document.removeEventListener('click', firstUserInteraction, true);
+        document.removeEventListener('keydown', firstUserInteraction, true);
+        document.removeEventListener('touchstart', firstUserInteraction, true);
+      }
+      document.addEventListener('click', firstUserInteraction, true);
+      document.addEventListener('keydown', firstUserInteraction, true);
+      document.addEventListener('touchstart', firstUserInteraction, true);
+
       window.introAudio = {
         fadeOut: (duration = 1200) => {
           if (isPlaying) {
@@ -4301,6 +4327,14 @@
       const cursor = document.getElementById('hero-cursor');
       const audio  = document.getElementById('typewriter-audio');
       if (!typewriterEl || !cursor || !audio) return;
+
+      // Robust error logging for typewriter audio
+      audio.addEventListener('error', () => {
+        const err = audio.error;
+        console.error('[typewriter-audio] kunne ikke lastes:',
+          err && { code: err.code, message: err.message },
+          '\n  src:', audio.currentSrc || audio.src);
+      });
 
       const FULL_TEXT = 'Hver dag forsvinner kvinner ut av arbeidslivet —\nfordi ingen spurte i tide.';
       // ~75 tegn over 7s = ~10.7 tegn/sek — matcher rytmen i typewriter-lyden
