@@ -9,6 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <!-- Lenis smooth scroll -->
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+<!-- Matter.js — fysikk for gravity-finale -->
+<script src="https://cdn.jsdelivr.net/npm/matter-js@0.20.0/build/matter.min.js"></script>
 <style>
   /* ============================================================
      DESIGNSYSTEM
@@ -20,6 +22,7 @@
     --ink-soft:  #3D4F40;
     --rose:      #E8B5AC;
     --rose-soft: #F0CCC4;
+    --rose-text: #C8847A;   /* Dypere variant for tekst — kontrast mot rosa-bakgrunn */
     --line:      rgba(42,58,45,0.18);
     --line-soft: rgba(42,58,45,0.08);
     --white:     #F7F3EE;
@@ -97,7 +100,7 @@
   }
   .t-display em, .t-h1 em, .t-h2 em, .t-lede em {
     font-style: italic;
-    color: var(--rose);
+    color: var(--rose-text);
     font-weight: inherit;
   }
 
@@ -276,7 +279,7 @@
     font-family: var(--serif);
     font-style: italic;
     font-size: 22px;
-    color: var(--rose);
+    color: var(--rose-text);
     margin-bottom: 4px;
     line-height: 1;
   }
@@ -312,7 +315,7 @@
     position: absolute;
     left: 0; top: 0;
     font-style: italic;
-    color: var(--rose);
+    color: var(--rose-text);
     opacity: 0;
     transform: translateY(14%);
     transition:
@@ -372,7 +375,7 @@
     align-items: baseline;
     transition: color 0.8s var(--ease-in-out);
   }
-  .logo .i-rose { color: var(--rose); font-style: italic; }
+  .logo .i-rose { color: var(--rose-text); font-style: italic; }
   .logo .sep   { opacity: 0.5; margin-left: 2px; }
   body[data-theme="dark"] .logo { color: var(--white); }
 
@@ -764,7 +767,7 @@
   }
   .intro-brand em {
     font-style: italic;
-    color: var(--rose);
+    color: var(--rose);   /* mot mørk bakgrunn — lys rose pop'er bedre */
     font-weight: 300;
   }
   .intro-meta {
@@ -883,7 +886,7 @@
     white-space: nowrap;
   }
   .intro-cta-arrow {
-    color: var(--rose);
+    color: var(--rose);   /* SVG-pil mot mørk knapp-bakgrunn */
     transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     width: 16px; height: 16px;
   }
@@ -1082,7 +1085,7 @@
     display: inline-block;
     margin-left: 2px;
     font-weight: 200;
-    color: var(--rose);
+    color: var(--rose-text);
     animation: cursorBlink 1s steps(1, end) infinite;
     transform: translateY(-0.05em);
   }
@@ -1146,7 +1149,7 @@
     font-family: var(--serif);
     font-weight: 300;
     font-size: clamp(48px, 5vw, 72px);
-    color: var(--rose);
+    color: var(--rose-text);
     line-height: 1;
     margin-bottom: 12px;
     letter-spacing: -0.02em;
@@ -1168,7 +1171,7 @@
   }
   .problem-conclusion em {
     font-style: italic;
-    color: var(--rose);
+    color: var(--rose-text);
   }
   .t-source {
     font-size: 11px;
@@ -1234,7 +1237,7 @@
     font-style: italic;
     font-weight: 300;
     font-size: 24px;
-    color: var(--rose);
+    color: var(--rose-text);
     flex-shrink: 0;
     margin-top: -2px;
   }
@@ -1249,7 +1252,7 @@
   }
   .value-text em {
     font-style: italic;
-    color: var(--rose);
+    color: var(--rose-text);
   }
   .value-conclusion {
     font-family: var(--serif);
@@ -1331,6 +1334,30 @@
     position: relative;
     z-index: 5;
   }
+
+  /* Avslutnings-tekst — to separate <p> i én sentrert blokk for å unngå
+     word-wrap-bugs og sikre at begge linjer alltid er synlige sammen */
+  .final-statement {
+    font-family: var(--serif);   /* Fraunces — sikrer serif på alle barn */
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    display: block;
+    width: 100%;
+  }
+  .final-statement p {
+    font-family: var(--serif);
+    margin: 0 auto;          /* Auto-sentrer hver linje (slide-lede har
+                                 max-width: 720px som ellers ville
+                                 venstrejustert linjen) */
+  }
+  .final-statement em {
+    font-family: var(--serif);
+    font-style: italic;
+  }
+  .final-statement .end-title {
+    margin-bottom: 12px;
+  }
   .end-content > .t-eyebrow {
     display: inline-flex;
     align-items: center;
@@ -1338,9 +1365,18 @@
     margin: 0 auto 36px;
   }
   .end-title {
+    font-family: var(--serif);   /* Fraunces — matcher resten av display-tekst */
+    font-weight: 300;
     font-size: clamp(64px, 8vw, 110px) !important;
     line-height: 0.95;
+    letter-spacing: -0.025em;
+    color: var(--ink);
     margin-bottom: 24px;
+  }
+  .end-title em {
+    font-style: italic;
+    font-family: var(--serif);
+    color: var(--rose-text);
   }
   .end-line {
     font-family: var(--serif);
@@ -1353,10 +1389,333 @@
   }
   .end-line em {
     font-style: italic;
-    color: var(--rose);
+    color: var(--rose-text);
     font-weight: 400;
   }
   /* Ingen padding-bottom her — det forskjøv vertikal-sentreringen */
+
+  /* ============================================================
+     GRAVITY-FINALE (#chapter-final) — Matter.js fysikk-fall
+     ============================================================ */
+  .chapter-final {
+    height: auto;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Hovedtekst — flyter sentralt, ingen fysikk */
+  .final-message {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 40px;
+    opacity: 0;
+    transform: scale(0.92);
+    transition:
+      opacity 1.6s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+  .final-message.is-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .final-title {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(40px, 5vw, 76px);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin: 0 0 24px 0;
+  }
+  .final-title em {
+    font-style: italic;
+    color: var(--rose-text);
+  }
+  .final-cta {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(20px, 2vw, 28px);
+    color: var(--ink-soft);
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+
+  /* Gravity-stage (fysikk-verdens DOM-overlay) */
+  .gravity-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+  }
+  .gravity-item {
+    position: absolute;
+    transform-origin: center center;
+    user-select: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    will-change: transform;
+  }
+  .gravity-item.is-falling { opacity: 1; }
+
+  /* Element-styling */
+  .gravity-quote,
+  .gravity-quote-small {
+    background: rgba(247, 243, 238, 0.85);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(232, 181, 172, 0.3);
+    border-radius: 100px;
+    padding: 12px 24px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--ink);
+    box-shadow: 0 8px 24px rgba(42, 58, 45, 0.06);
+    white-space: nowrap;
+  }
+  .gravity-quote { font-size: 18px; }
+  .gravity-quote-small { font-size: 15px; }
+  .gravity-quote em {
+    font-style: italic;
+    color: var(--rose-text);
+  }
+  .gravity-quote p,
+  .gravity-quote-small p { margin: 0; }
+
+  .gravity-stat {
+    background: var(--rose-soft);
+    border: 1px solid rgba(232, 181, 172, 0.5);
+    border-radius: 16px;
+    padding: 16px 28px;
+    font-family: var(--serif);
+    font-weight: 300;
+    color: var(--ink);
+    box-shadow: 0 8px 24px rgba(232, 181, 172, 0.2);
+  }
+  .g-stat-num {
+    font-size: 32px;
+    letter-spacing: -0.02em;
+  }
+
+  .gravity-tag,
+  .gravity-tag-large {
+    background: var(--bg-deep);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .gravity-tag-large {
+    background: var(--rose);
+    color: var(--white);
+    font-size: 14px;
+    padding: 10px 22px;
+  }
+
+  .gravity-phone {
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(42, 58, 45, 0.12);
+  }
+  .gravity-phone svg { display: block; }
+
+  .gravity-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--rose);
+    opacity: 0.6;
+  }
+
+  .gravity-source {
+    background: rgba(247, 243, 238, 0.7);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .gravity-source p { margin: 0; }
+
+  @media (max-width: 640px) {
+    .gravity-dot,
+    .gravity-source,
+    .gravity-tag-large { display: none; }
+    .gravity-quote { font-size: 14px; padding: 8px 16px; }
+    .gravity-quote-small { font-size: 12px; padding: 6px 14px; }
+    .g-stat-num { font-size: 24px; }
+    .gravity-phone svg { width: 70px; height: 112px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gravity-item { display: none; }
+    .final-message {
+      opacity: 1 !important;
+      transform: scale(1) !important;
+    }
+  }
+
+  /* ─── Performance tier CSS-overrides ─── */
+
+  /* Low tier: ingen blur, enklere skygger (sparer GPU) */
+  [data-tier="low"] .gravity-quote,
+  [data-tier="low"] .gravity-quote-small,
+  [data-tier="low"] .gravity-nav-stamp,
+  [data-tier="low"] .gravity-logo,
+  [data-tier="low"] .gravity-icon,
+  [data-tier="low"] .gravity-figure,
+  [data-tier="low"] .gravity-source {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background-color: rgba(247, 243, 238, 0.95);
+  }
+  [data-tier="low"] .gravity-quote,
+  [data-tier="low"] .gravity-quote-small,
+  [data-tier="low"] .gravity-stat,
+  [data-tier="low"] .gravity-tag,
+  [data-tier="low"] .gravity-tag-large,
+  [data-tier="low"] .gravity-phone,
+  [data-tier="low"] .gravity-icon,
+  [data-tier="low"] .gravity-figure,
+  [data-tier="low"] .gravity-nav-stamp,
+  [data-tier="low"] .gravity-logo {
+    box-shadow: 0 4px 12px rgba(42, 58, 45, 0.05) !important;
+  }
+
+  /* Minimal tier: skjul gravity-stage helt, vis tekst umiddelbart */
+  [data-tier="minimal"] .gravity-stage { display: none; }
+  [data-tier="minimal"] .final-message {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+  }
+
+  /* ─── Gravity: nav-stempel ─── */
+  .gravity-nav-stamp {
+    background: rgba(247, 243, 238, 0.92);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(232, 181, 172, 0.3);
+    border-radius: 100px;
+    padding: 8px 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    letter-spacing: 0.18em;
+    white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(42, 58, 45, 0.06);
+  }
+  .g-stamp-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--rose);
+  }
+
+  /* ─── Gravity: livsfase-ikoner (runde, ruller når de lander) ─── */
+  .gravity-icon {
+    background: rgba(247, 243, 238, 0.85);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid rgba(232, 181, 172, 0.25);
+    border-radius: 50%;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(42, 58, 45, 0.06);
+  }
+  .gravity-icon svg { display: block; }
+
+  /* ─── Gravity: damekropp-silhuett ─── */
+  .gravity-figure {
+    background: rgba(247, 243, 238, 0.85);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid rgba(232, 181, 172, 0.25);
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 10px 24px rgba(42, 58, 45, 0.08);
+  }
+  .gravity-figure svg { display: block; }
+
+  /* ─── Gravity: behov-tags fra prototypen ─── */
+  .gravity-need {
+    background: rgba(240, 204, 196, 0.6);
+    border: 1px solid rgba(232, 181, 172, 0.5);
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .gravity-icon svg   { width: 40px; height: 40px; }
+    .gravity-figure svg { width: 44px; height: 66px; }
+    .gravity-need       { font-size: 11px; padding: 6px 14px; }
+    /* Skjul to ikoner på smal skjerm for å redusere overfylling */
+    .gravity-item[data-gravity="icon-cycle"],
+    .gravity-item[data-gravity="icon-mental"] { display: none; }
+  }
+
+  /* ─── Gravity: HVILD-logo ─── */
+  .gravity-logo {
+    background: rgba(247, 243, 238, 0.92);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(232, 181, 172, 0.3);
+    border-radius: 8px;
+    padding: 12px 22px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-family: var(--serif);
+    white-space: nowrap;
+    box-shadow: 0 12px 28px rgba(42, 58, 45, 0.08);
+  }
+  .g-logo-hvild {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0.05em;
+  }
+  .g-logo-bracket {
+    font-style: italic;
+    color: var(--rose);
+  }
+  .g-logo-x {
+    font-size: 14px;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+  .g-logo-mode {
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--ink);
+  }
 
   /* Symptom-tags (employeeScreens[2]) */
   .symptom-tags {
@@ -1481,7 +1840,7 @@
     max-width: 640px;
   }
   .prototype-header .proto-title em {
-    color: var(--rose);
+    color: var(--rose-text);
     font-style: italic;
   }
 
@@ -2101,12 +2460,12 @@
   }
   .cursor-ring.is-hovering {
     width: 56px; height: 56px;
-    border-color: var(--rose);
+    border-color: var(--rose-text);
     background: rgba(232,181,172,0.10);
   }
   .cursor-ring.is-clickable {
     width: 48px; height: 48px;
-    border-color: var(--rose);
+    border-color: var(--rose-text);
     border-width: 1.5px;
   }
   .cursor-ring.is-active {
@@ -2115,7 +2474,7 @@
   }
   .cursor-ring.is-final-action {
     width: 80px; height: 80px;
-    border-color: var(--rose);
+    border-color: var(--rose-text);
     border-width: 2px;
     background: rgba(232,181,172,0.15);
   }
@@ -2240,6 +2599,7 @@
     <span class="dot"    data-n="3"></span>
     <span class="dot"    data-n="4"></span>
     <span class="dot"    data-n="5"></span>
+    <span class="dot"    data-n="6"></span>
   </nav>
 
   <!-- ============================================================
@@ -2746,14 +3106,234 @@
 
         <div class="content-container">
           <div class="end-content">
-            <h2 class="t-display slide-title end-title">
-              Dere <em>ser</em> det.
-            </h2>
-            <p class="end-line slide-lede">
-              Livsfase Mode <em>gjør noe med det</em>.
-            </p>
+            <div class="final-statement">
+              <p class="end-title slide-title">
+                Dere <em>ser</em> det.
+              </p>
+              <p class="end-line slide-lede">
+                Livsfase Mode <em>gjør noe med det</em>.
+              </p>
+            </div>
           </div>
         </div>
+    </section>
+
+    <!-- Gravity-finale — wow-moment: alt fra pitchen faller ned med fysikk -->
+    <section class="chapter chapter-final" id="chapter-final" data-theme="light" data-n="6">
+
+      <!-- Sentral hovedtekst — flyter, ingen fysikk -->
+      <div class="final-message" id="final-message">
+        <h2 class="final-title">
+          Hjelp oss bygge<br>
+          struktur som <em>virker</em>.
+        </h2>
+        <p class="final-cta">Stem på oss.</p>
+      </div>
+
+      <!-- Fysikk-verden — fallende elementer -->
+      <div class="gravity-stage" id="gravity-stage" aria-hidden="true">
+        <div class="gravity-item gravity-quote" data-gravity="quote-1">
+          <p>Hver dag forsvinner kvinner</p>
+        </div>
+        <div class="gravity-item gravity-stat" data-gravity="stat-1">
+          <span class="g-stat-num">1 av 3</span>
+        </div>
+        <div class="gravity-item gravity-quote-small" data-gravity="quote-2">
+          <p>fordi ingen spurte i tide</p>
+        </div>
+        <div class="gravity-item gravity-tag" data-gravity="tag-1">
+          <span>Sykefravær</span>
+        </div>
+        <div class="gravity-item gravity-phone" data-gravity="phone-1">
+          <svg viewBox="0 0 100 160" width="100" height="160" aria-hidden="true">
+            <rect x="2" y="2" width="96" height="156" rx="14"
+                  fill="var(--white)" stroke="var(--ink)" stroke-width="1.2"/>
+            <line x1="42" y1="8" x2="58" y2="8" stroke="var(--ink)" stroke-width="1.2"/>
+            <text x="10" y="32" font-family="Fraunces" font-size="8"
+                  font-style="italic" fill="var(--ink)">Sofie · 49</text>
+            <rect x="10" y="44" width="36" height="11" rx="5"
+                  fill="var(--rose-soft)" opacity="0.6"/>
+            <text x="28" y="51" font-family="Inter" font-size="5"
+                  fill="var(--ink)" text-anchor="middle">Søvn</text>
+            <rect x="50" y="44" width="40" height="11" rx="5"
+                  fill="var(--rose-soft)" opacity="0.6"/>
+            <text x="70" y="51" font-family="Inter" font-size="5"
+                  fill="var(--ink)" text-anchor="middle">Hjernetåke</text>
+            <rect x="10" y="68" width="80" height="32" rx="4"
+                  fill="none" stroke="var(--rose)" stroke-width="0.8" opacity="0.5"/>
+            <text x="14" y="80" font-family="Inter" font-size="5"
+                  fill="var(--ink-soft)">TOPPANBEFALING</text>
+            <text x="14" y="92" font-family="Fraunces" font-size="6"
+                  fill="var(--ink)">Overgangsalder</text>
+            <rect x="10" y="125" width="80" height="18" rx="9"
+                  fill="var(--ink)"/>
+            <text x="50" y="137" font-family="Inter" font-size="6"
+                  fill="var(--white)" text-anchor="middle">Bestill</text>
+          </svg>
+        </div>
+        <div class="gravity-item gravity-flower" data-gravity="flower-1">
+          <svg viewBox="0 0 60 80" width="60" height="80" aria-hidden="true">
+            <line x1="30" y1="80" x2="30" y2="40" stroke="var(--ink)" stroke-width="1" opacity="0.5"/>
+            <ellipse cx="22" cy="28" rx="6" ry="11" transform="rotate(-25 22 28)"
+                     stroke="var(--ink)" stroke-width="1" fill="none" opacity="0.5"/>
+            <ellipse cx="38" cy="28" rx="6" ry="11" transform="rotate(25 38 28)"
+                     stroke="var(--ink)" stroke-width="1" fill="none" opacity="0.5"/>
+            <ellipse cx="30" cy="22" rx="6" ry="11"
+                     stroke="var(--ink)" stroke-width="1" fill="none" opacity="0.55"/>
+            <circle cx="30" cy="32" r="3" fill="var(--rose)" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="gravity-item gravity-quote" data-gravity="quote-3">
+          <p>Dere <em>ser</em> det.</p>
+        </div>
+        <div class="gravity-item gravity-tag" data-gravity="tag-2">
+          <span>45–55 år</span>
+        </div>
+        <div class="gravity-item gravity-dot" data-gravity="dot-1"></div>
+        <div class="gravity-item gravity-dot" data-gravity="dot-2"></div>
+        <div class="gravity-item gravity-dot" data-gravity="dot-3"></div>
+        <div class="gravity-item gravity-dot" data-gravity="dot-4"></div>
+        <div class="gravity-item gravity-tag-large" data-gravity="tag-3">
+          <span>Overgangsalder</span>
+        </div>
+        <div class="gravity-item gravity-source" data-gravity="source-1">
+          <p>KLAR · UiB 2024</p>
+        </div>
+
+        <!-- 15. Nav-tidsstempel -->
+        <div class="gravity-item gravity-nav-stamp" data-gravity="nav-stamp">
+          <span class="g-stamp-dot"></span>
+          <span>PITCH · LIVE · 17:07:53 · OSLO</span>
+        </div>
+
+        <!-- 16. HVILD × Livsfase Mode-logo -->
+        <div class="gravity-item gravity-logo" data-gravity="logo">
+          <span class="g-logo-hvild">HV<span class="g-logo-bracket">/</span>LD</span>
+          <span class="g-logo-x">×</span>
+          <span class="g-logo-mode">Livsfase Mode</span>
+        </div>
+
+        <!-- 17. Livsfase-ikon: Graviditet -->
+        <div class="gravity-item gravity-icon" data-gravity="icon-pregnancy">
+          <svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true">
+            <path d="M 12 28 Q 12 18, 24 14 Q 36 18, 36 28 Q 36 36, 24 38 Q 12 36, 12 28 Z"
+                  stroke="var(--ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
+            <ellipse cx="24" cy="26" rx="4" ry="6"
+                     fill="var(--rose)" opacity="0.65"/>
+            <line x1="24" y1="20" x2="24" y2="14"
+                  stroke="var(--ink)" stroke-width="1" opacity="0.5"/>
+          </svg>
+        </div>
+
+        <!-- 18. Livsfase-ikon: Postpartum (åpen blomst) -->
+        <div class="gravity-item gravity-icon" data-gravity="icon-postpartum">
+          <svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true">
+            <circle cx="24" cy="24" r="3" fill="var(--rose)" opacity="0.7"/>
+            <ellipse cx="24" cy="14" rx="4" ry="8"
+                     stroke="var(--ink)" stroke-width="1.1" fill="none" opacity="0.55"/>
+            <ellipse cx="33" cy="20" rx="4" ry="8" transform="rotate(60 33 20)"
+                     stroke="var(--ink)" stroke-width="1.1" fill="none" opacity="0.55"/>
+            <ellipse cx="33" cy="32" rx="4" ry="8" transform="rotate(120 33 32)"
+                     stroke="var(--ink)" stroke-width="1.1" fill="none" opacity="0.55"/>
+            <ellipse cx="15" cy="32" rx="4" ry="8" transform="rotate(-120 15 32)"
+                     stroke="var(--ink)" stroke-width="1.1" fill="none" opacity="0.55"/>
+            <ellipse cx="15" cy="20" rx="4" ry="8" transform="rotate(-60 15 20)"
+                     stroke="var(--ink)" stroke-width="1.1" fill="none" opacity="0.55"/>
+          </svg>
+        </div>
+
+        <!-- 19. Livsfase-ikon: Overgangsalder (løvetann med frø) -->
+        <div class="gravity-item gravity-icon" data-gravity="icon-menopause">
+          <svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true">
+            <circle cx="24" cy="24" r="2" fill="var(--ink)" opacity="0.6"/>
+            <g stroke="var(--ink)" stroke-width="0.8" opacity="0.45" stroke-linecap="round">
+              <line x1="24" y1="24" x2="24" y2="10"/>
+              <line x1="24" y1="24" x2="34" y2="14"/>
+              <line x1="24" y1="24" x2="38" y2="24"/>
+              <line x1="24" y1="24" x2="34" y2="34"/>
+              <line x1="24" y1="24" x2="24" y2="38"/>
+              <line x1="24" y1="24" x2="14" y2="34"/>
+              <line x1="24" y1="24" x2="10" y2="24"/>
+              <line x1="24" y1="24" x2="14" y2="14"/>
+            </g>
+            <g fill="var(--rose)" opacity="0.7">
+              <circle cx="24" cy="10" r="1.2"/>
+              <circle cx="38" cy="24" r="1.2"/>
+              <circle cx="24" cy="38" r="1.2"/>
+              <circle cx="10" cy="24" r="1.2"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- 20. Livsfase-ikon: Syklus (halvmåne i orbit) -->
+        <div class="gravity-item gravity-icon" data-gravity="icon-cycle">
+          <svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true">
+            <circle cx="24" cy="24" r="14"
+                    stroke="var(--ink)" stroke-width="1" fill="none"
+                    opacity="0.4" stroke-dasharray="2 3"/>
+            <path d="M 22 14 A 8 8 0 1 0 22 30 A 5 5 0 1 1 22 14 Z"
+                  fill="var(--rose)" opacity="0.65"/>
+          </svg>
+        </div>
+
+        <!-- 21. Livsfase-ikon: Psykisk helse (knopp med indre lys) -->
+        <div class="gravity-item gravity-icon" data-gravity="icon-mental">
+          <svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true">
+            <line x1="24" y1="40" x2="24" y2="28"
+                  stroke="var(--ink)" stroke-width="1.2" opacity="0.5"/>
+            <path d="M 24 28 Q 14 26, 14 18 Q 14 12, 20 12 Q 24 12, 24 16 Q 24 12, 28 12 Q 34 12, 34 18 Q 34 26, 24 28 Z"
+                  stroke="var(--ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
+            <circle cx="24" cy="19" r="3" fill="var(--rose)" opacity="0.7"/>
+          </svg>
+        </div>
+
+        <!-- 22. Livsfase-ikon: Kvinnehelse (sammenflettede bølger) -->
+        <div class="gravity-item gravity-icon" data-gravity="icon-womens">
+          <svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true">
+            <path d="M 8 18 Q 16 14, 24 18 Q 32 22, 40 18"
+                  stroke="var(--ink)" stroke-width="1.2" fill="none"
+                  opacity="0.55" stroke-linecap="round"/>
+            <path d="M 8 24 Q 16 20, 24 24 Q 32 28, 40 24"
+                  stroke="var(--rose)" stroke-width="1.4" fill="none"
+                  opacity="0.7" stroke-linecap="round"/>
+            <path d="M 8 30 Q 16 26, 24 30 Q 32 34, 40 30"
+                  stroke="var(--ink)" stroke-width="1.2" fill="none"
+                  opacity="0.55" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <!-- 23. Liten damekropp-silhuett (sett bakfra) -->
+        <div class="gravity-item gravity-figure" data-gravity="figure">
+          <svg viewBox="0 0 60 90" width="60" height="90" aria-hidden="true">
+            <ellipse cx="30" cy="14" rx="7" ry="9"
+                     stroke="var(--ink)" stroke-width="1.2" fill="none" opacity="0.55"/>
+            <path d="M 25 18 Q 24 28, 26 38"
+                  stroke="var(--ink)" stroke-width="0.8" fill="none" opacity="0.45"
+                  stroke-linecap="round"/>
+            <path d="M 35 18 Q 36 28, 34 38"
+                  stroke="var(--ink)" stroke-width="0.8" fill="none" opacity="0.45"
+                  stroke-linecap="round"/>
+            <path d="M 23 24 Q 18 30, 17 42 Q 16 56, 19 70 Q 22 80, 28 84"
+                  stroke="var(--ink)" stroke-width="1.3" fill="none" opacity="0.6"
+                  stroke-linecap="round"/>
+            <path d="M 37 24 Q 42 30, 43 42 Q 44 56, 41 70 Q 38 80, 32 84"
+                  stroke="var(--ink)" stroke-width="1.3" fill="none" opacity="0.6"
+                  stroke-linecap="round"/>
+            <circle cx="30" cy="50" r="2" fill="var(--rose)" opacity="0.65"/>
+          </svg>
+        </div>
+
+        <!-- 24. Behov-tag "Færre kveldsmøter" -->
+        <div class="gravity-item gravity-need" data-gravity="need-1">
+          <span>Færre kveldsmøter</span>
+        </div>
+
+        <!-- 25. Behov-tag "Hjemmekontor" -->
+        <div class="gravity-item gravity-need" data-gravity="need-2">
+          <span>Hjemmekontor</span>
+        </div>
+      </div>
+
     </section>
 
   </main>
@@ -2765,6 +3345,38 @@
 <script>
   (function () {
     'use strict';
+
+    // ============================================================
+    // PERFORMANCE TIER DETECTION — kjøres ved sidelasting
+    // Setter window.PERFORMANCE_TIER og <html data-tier="..."> som
+    // andre script (gravity-finale) og CSS leser av.
+    // ============================================================
+    (function detectPerformanceTier() {
+      let tier = 'high';
+      const isMobile = window.matchMedia('(max-width: 900px)').matches
+                    || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const cores = navigator.hardwareConcurrency || 4;
+      const memory = navigator.deviceMemory || 4;
+      const prefersReducedMotion =
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (prefersReducedMotion) {
+        tier = 'minimal';
+      } else if (isMobile) {
+        tier = 'low';
+      } else if (cores < 4 || memory < 4) {
+        tier = 'low';
+      } else if (cores < 8 || memory < 8) {
+        tier = 'medium';
+      } else {
+        tier = 'high';
+      }
+
+      window.PERFORMANCE_TIER = tier;
+      document.documentElement.setAttribute('data-tier', tier);
+      console.log('[Performance] Detected tier:', tier,
+        { isMobile, cores, memory, prefersReducedMotion });
+    })();
 
     gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -2958,6 +3570,7 @@
       '#chapter-prototype',  // Demo
       '#chapter-3',          // Verdi
       '#chapter-4',          // Avslutning
+      '#chapter-final',      // Collage
     ];
     const navChapters = CHAPTER_IDS
       .map(id => document.querySelector(id))
@@ -4081,6 +4694,243 @@
 
     // Refresh ScrollTrigger når alt er klart (fonter osv.)
     window.addEventListener('load', () => ScrollTrigger.refresh());
+
+    // ============================================================
+    // GRAVITY-FINALE — Matter.js fysikk-fall, tier-tilpasset
+    // ============================================================
+    (function initGravityFinale() {
+      const finalSection = document.getElementById('chapter-final');
+      const finalMessage = document.getElementById('final-message');
+      const stage        = document.getElementById('gravity-stage');
+      if (!finalSection || !finalMessage || !stage) return;
+
+      if (typeof Matter === 'undefined') {
+        console.warn('[gravity-finale] Matter.js ikke lastet — viser kun hovedtekst');
+        finalMessage.classList.add('is-visible');
+        return;
+      }
+
+      // Tier-konfigurasjon: hvor mye fysikk hver maskin tåler
+      const TIER_CONFIG = {
+        minimal: { elementCount: 0,  blur: false, settle: 0,    physicsScale: 1   },
+        low:     { elementCount: 8,  blur: false, settle: 2400, physicsScale: 0.9 },
+        medium:  { elementCount: 16, blur: true,  settle: 2800, physicsScale: 1   },
+        high:    { elementCount: 25, blur: true,  settle: 3200, physicsScale: 1   },
+      };
+
+      // Prioritert rekkefølge — viktigste meningsbærende elementer først.
+      // Ved low tier velges kun de første N i denne lista.
+      const PRIORITY_ORDER = [
+        'quote-1', 'stat-1', 'phone-1', 'flower-1', 'quote-3',
+        'tag-3', 'icon-menopause', 'figure', 'quote-2', 'tag-1',
+        'logo', 'icon-postpartum', 'tag-2', 'icon-pregnancy', 'need-1',
+        'icon-womens', 'nav-stamp', 'need-2', 'icon-cycle', 'source-1',
+        'icon-mental', 'dot-1', 'dot-2', 'dot-3', 'dot-4',
+      ];
+
+      function selectElementsForTier(allItems, count) {
+        if (count >= allItems.length) return Array.from(allItems);
+        const itemMap = {};
+        allItems.forEach(item => { itemMap[item.dataset.gravity] = item; });
+        const selected = [];
+        for (const key of PRIORITY_ORDER) {
+          if (selected.length >= count) break;
+          if (itemMap[key]) selected.push(itemMap[key]);
+        }
+        return selected;
+      }
+
+      // FPS-monitor: hvis fps faller under 40 to sekunder på rad → degrader
+      function startFpsMonitor(bodies, World, engine) {
+        let frameCount = 0;
+        let lastCheck = performance.now();
+        let lowFpsStreak = 0;
+        let active = true;
+        function checkFps(now) {
+          if (!active) return;
+          frameCount++;
+          const elapsed = now - lastCheck;
+          if (elapsed >= 1000) {
+            const fps = (frameCount * 1000) / elapsed;
+            frameCount = 0;
+            lastCheck = now;
+            if (fps < 40) {
+              lowFpsStreak++;
+              if (lowFpsStreak >= 2) {
+                console.warn('[Performance] FPS lav (' + fps.toFixed(1) + '), degraderer');
+                degradePerformance(bodies, World, engine);
+                active = false;
+                return;
+              }
+            } else {
+              lowFpsStreak = 0;
+            }
+          }
+          requestAnimationFrame(checkFps);
+        }
+        requestAnimationFrame(checkFps);
+      }
+
+      function degradePerformance(bodies, World, engine) {
+        const halfCount = Math.floor(bodies.length / 2);
+        for (let i = halfCount; i < bodies.length; i++) {
+          const { item, body } = bodies[i];
+          item.style.transition = 'opacity 0.6s ease';
+          item.style.opacity = '0';
+          setTimeout(() => {
+            try { Matter.World.remove(engine.world, body); } catch (e) {}
+            item.style.display = 'none';
+          }, 600);
+        }
+        document.documentElement.setAttribute('data-tier', 'low');
+      }
+
+      // Tier 'minimal' (eller reduced-motion): hopp rett til tekst
+      const tier = window.PERFORMANCE_TIER || 'high';
+      if (tier === 'minimal' || TIER_CONFIG[tier].elementCount === 0) {
+        finalMessage.classList.add('is-visible');
+        return;
+      }
+
+      let hasAnimated = false;
+      let engine, runner, syncRafId;
+
+      function startGravityAnimation() {
+        const config = TIER_CONFIG[tier];
+        const { Engine, World, Bodies, Body, Runner } = Matter;
+
+        engine = Engine.create();
+        engine.gravity.y = 1 * config.physicsScale;
+
+        runner = Runner.create();
+
+        const stageRect = stage.getBoundingClientRect();
+        const W = stageRect.width;
+        const H = stageRect.height;
+
+        // Statiske vegger og bakke
+        const wall = 60;
+        const ground = Bodies.rectangle(W / 2, H + wall / 2 - 2, W * 2, wall, { isStatic: true, label: 'ground' });
+        const leftWall  = Bodies.rectangle(-wall / 2,     H / 2, wall, H * 2, { isStatic: true, label: 'leftWall' });
+        const rightWall = Bodies.rectangle(W + wall / 2,  H / 2, wall, H * 2, { isStatic: true, label: 'rightWall' });
+        World.add(engine.world, [ground, leftWall, rightWall]);
+
+        // Velg hvilke elementer som skal med basert på tier
+        const allItems = stage.querySelectorAll('.gravity-item');
+        const itemsToUse = selectElementsForTier(allItems, config.elementCount);
+        // Skjul de som ikke skal med
+        allItems.forEach(item => {
+          if (itemsToUse.indexOf(item) === -1) item.style.display = 'none';
+        });
+
+        const bodies = [];
+
+        itemsToUse.forEach((item) => {
+          if (getComputedStyle(item).display === 'none') return;
+
+          // Mål faktisk størrelse — element må være i layout for å få bbox
+          item.style.opacity = '0';
+          item.style.position = 'absolute';
+          item.style.top  = '0';
+          item.style.left = '0';
+
+          const rect = item.getBoundingClientRect();
+          const width = rect.width || 100;
+          const height = rect.height || 40;
+
+          // Tilfeldig start: spredd horisontalt, varierende høyde over toppen
+          const startX = Math.random() * (W - width) + width / 2;
+          const startY = -50 - Math.random() * 250;
+          const startAngle = (Math.random() - 0.5) * Math.PI;
+          const angularVel = (Math.random() - 0.5) * 0.1;
+
+          let body;
+          // Sirkulær fysikk for prikker OG livsfase-ikoner (rull naturlig)
+          if (item.classList.contains('gravity-dot') ||
+              item.classList.contains('gravity-icon')) {
+            body = Bodies.circle(startX, startY, Math.max(width, height) / 2, {
+              restitution: 0.5,
+              friction: 0.3,
+              density: 0.001,
+            });
+          } else {
+            body = Bodies.rectangle(startX, startY, width, height, {
+              restitution: 0.4,
+              friction: 0.4,
+              density: 0.001,
+              chamfer: { radius: 8 },
+            });
+          }
+          Body.setAngle(body, startAngle);
+          Body.setAngularVelocity(body, angularVel);
+          Body.setVelocity(body, { x: (Math.random() - 0.5) * 2, y: 0 });
+
+          World.add(engine.world, body);
+
+          // Initial DOM-posisjon (matcher fysikk-kropp) + gjør synlig.
+          // Setter inline opacity:1 fordi vi satte opacity:0 inline tidligere
+          // for å skjule under måling — det overstyrer .is-falling-klassen.
+          item.style.transform = `translate(${startX - width / 2}px, ${startY - height / 2}px) rotate(${startAngle}rad)`;
+          item.style.opacity = '1';
+          item.classList.add('is-falling');
+          bodies.push({ item, body, width, height });
+        });
+
+        // Sync DOM med fysikk hver frame
+        function syncDOM() {
+          for (let i = 0; i < bodies.length; i++) {
+            const b = bodies[i];
+            const x = b.body.position.x - b.width / 2;
+            const y = b.body.position.y - b.height / 2;
+            b.item.style.transform = `translate(${x}px, ${y}px) rotate(${b.body.angle}rad)`;
+          }
+          syncRafId = requestAnimationFrame(syncDOM);
+        }
+
+        Runner.run(runner, engine);
+        syncDOM();
+
+        // FPS-monitor kun på medium/high (de tunge tier-ene). Hvis fps
+        // faller under 40 i 2 sek på rad, fjernes halvparten av items.
+        if (tier === 'medium' || tier === 'high') {
+          startFpsMonitor(bodies, World, engine);
+        }
+
+        // Hovedtekst tones inn etter tier-bestemt settle-tid
+        setTimeout(() => finalMessage.classList.add('is-visible'), config.settle);
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            hasAnimated = true;
+            startGravityAnimation();
+          }
+        });
+      }, { threshold: 0.4 });
+      observer.observe(finalSection);
+
+      // GSAP ScrollTrigger-fallback (mer pålitelig i bakgrunnsfaner / iframes)
+      if (window.ScrollTrigger) {
+        ScrollTrigger.create({
+          trigger: finalSection,
+          start: 'top 60%',
+          onEnter: () => {
+            if (!hasAnimated) {
+              hasAnimated = true;
+              startGravityAnimation();
+            }
+          },
+        });
+      }
+
+      // Cleanup ved unload
+      window.addEventListener('beforeunload', () => {
+        if (syncRafId) cancelAnimationFrame(syncRafId);
+        if (runner) Matter.Runner.stop(runner);
+        if (engine) Matter.Engine.clear(engine);
+      });
+    })();
 
     // ============================================================
     // LENIS SMOOTH SCROLL
